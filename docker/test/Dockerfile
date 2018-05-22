@@ -17,8 +17,6 @@ VOLUME /build
 
 WORKDIR /application
 
-COPY .git /application
-
 COPY src /application
 
 # Download requirements to the build cache

@@ -1,4 +1,4 @@
-#!/bin/bash
+3#!/bin/bash
 
 set pass "admin123"
 
