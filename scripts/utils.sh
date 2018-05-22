@@ -30,6 +30,7 @@ function addEnvFile() {
 PRIVATE_KEY_TEST=${PRIVATE_KEY_TEST}
 PUBLIC_KEY_TEST=${PUBLIC_KEY_TEST}
 SECRET_KEY=${SECRET_KEY}
+COVERALLS_REPO_TOKEN=${COVERALLS_REPO_TOKEN}
 EOF
         success "lsEnvironment file has been created successfully"
         return
