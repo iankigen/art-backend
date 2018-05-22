@@ -109,10 +109,6 @@ ENV/
 # static files
 staticfiles
 
-
-# Docker
-docker-compose.yml
-
 #vscode files
 .vscode
 
