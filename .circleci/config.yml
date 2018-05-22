@@ -1,61 +1,42 @@
 # Python CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-python/ for more details
-#
+defaults: &defaults
+  docker:
+    - image: circleci/python:3.6.1
+  working_directory: ~/andela-art-backend
 version: 2
 jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-      - image: circleci/python:3.6.4
-        environment:
-          PIPENV_VENV_IN_PROJECT: 'true'
-          DATABASE_URL: postgresql://root@localhost/circle_test?sslmode=disable
-      - image: circleci/postgres:9.4
-        environment:
-          POSTGRES_USER: root
-          POSTGRES_DB: circle_test
-          POSTGRES_PASSWORD: ""
-
-    working_directory: ~/art-backend
-
+  test:
+    <<: *defaults
     steps:
       - checkout
-      - run: sudo chown -R circleci:circleci /usr/local/bin
-      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.6/site-packages
-      - restore_cache:
-          key: deps9-{{ .Branch }}-
+      - setup_remote_docker
       - run:
+          name: run tests
           command: |
-            sudo pip install pipenv
-            pipenv install --skip-lock -r requirements.txt
-      - save_cache:
-          key: deps9-{{ .Branch }}-
-          paths:
-            - ".venv"
-            - "/usr/local/bin"
-            - "/usr/local/lib/python3.6/site-packages"
+            make test
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
+  deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 17.11.0-ce
       - run:
-          name: make migrations
+          name: deploy application
           command: |
-            pipenv run "python manage.py makemigrations"
-      - run:
-          name: migrate
-          command: |
-            pipenv run "python manage.py migrate"
-
-      - run:
-          name: pep8 checks on project
-          command: |
-            pipenv run "flake8 ."
-
-      - run:
-         name: run tests
-         command: |
-           pipenv run "coverage run --source api manage.py test -v 2"
-
-      - run:
-          name: run coveralls
-          command: |
-            pipenv run "coveralls"
+            bash scripts/deploy.sh
+workflows:
+  version: 2
+  test_and_deploy:
+    jobs:
+      - test
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - staging
+                - master

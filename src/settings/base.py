@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'core',
     'api',
     'oauth2_provider',
-    'rest_framework_swagger'
+    'rest_framework_swagger',
 ]
 
 AUTH_USER_MODEL = 'core.User'
