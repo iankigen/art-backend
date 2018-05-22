@@ -38,5 +38,6 @@ workflows:
           filters:
             branches:
               only:
+                - ch-initial-ci-cd
                 - staging
                 - master
