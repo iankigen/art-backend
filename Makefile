@@ -15,7 +15,7 @@ PROJECT_NAME := Andela-Resource-Tracker
 REPO_NAME ?= art-backend
 ORG_NAME ?= bench-projects
 # File names
-DOCKER_TEST_COMPOSE_FILE := docker/test/docker-compose.yml
+DOCKER_TEST_COMPOSE_FILE := ./docker/test/docker-compose.yml
 DOCKER_REL_COMPOSE_FILE := docker/release/docker-compose.yml
 
 # Docker compose project names
