@@ -1,5 +1,3 @@
-Dockerfile
-docker-compose.yml.template
 install_art.sh
 Procfile
 README.md
