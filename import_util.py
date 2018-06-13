@@ -1,4 +1,6 @@
 import os
+import urllib.parse
+import urllib.request
 
 
 def is_valid_file(file_name):
@@ -41,3 +43,41 @@ def display_skipped(result):
         for key, value in result.items():
 
             print('{0}\t \t{1} \t{2}'.format(value[1], key, value[0]))
+
+
+def is_valid_url(url):
+    """
+    checks if url is valid
+    :param url: url
+    :return: boolean
+    """
+    parsed_url = urllib.parse.urlparse(url)
+
+    if parsed_url.scheme and parsed_url.netloc:
+        return True
+
+    print('Please enter a valid url.')
+    return False
+
+
+def get_csv_from_url(url):
+    """
+    Get csv from URL
+    :param url: url that points to csv file
+    :return: None or file object
+    """
+    filename = 'temp.csv'
+    try:
+        res = urllib.request.urlopen(url)
+    except (urllib.error.HTTPError, urllib.error.HTTPError):
+        print('There was an error processing your request')
+        return None
+
+    if 'csv' in res.getheader('content-type'):
+        f = open(filename, 'wb')
+        f.write(res.read())
+        f.close()
+        return filename
+
+    print('The url does not point to a valid a csv file')
+    return None
